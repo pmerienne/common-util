@@ -1,13 +1,19 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>fr.pmerienne</groupId>
-	<artifactId>common.util</artifactId>
+	<artifactId>common</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
+	<packaging>pom</packaging>
 
-	<name>Common utils</name>
-	<description>Utils library</description>
+	<name>Common util</name>
+	<description>Util library</description>
 	<url>https://github.com/pmerienne/common-util</url>
 	<inceptionYear>2011</inceptionYear>
+
+	<modules>
+		<module>common-annotation</module>
+	</modules>
 
 	<licenses>
 		<license>
@@ -28,7 +34,6 @@
 			<organizationUrl>http://www.excilys.com</organizationUrl>
 		</developer>
 	</developers>
-
 
 	<properties>
 		<!--Trick to deploy releases (using mvn release:perform) to the local file 
