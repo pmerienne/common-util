@@ -1,13 +1,7 @@
 package fr.pmerienne.common.annotation;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
-
-import org.apache.log4j.Logger;
-import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
-import org.aspectj.lang.reflect.MethodSignature;
+import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.stereotype.Component;
 
 /**
@@ -44,36 +38,22 @@ import org.springframework.stereotype.Component;
  */
 @Aspect
 @Component
-public class NotNullAspect {
+public class NotNullAspect extends ParameterAspect<NotNull> {
 
-	private final static Logger LOGGER = Logger.getLogger(NotNullAspect.class);
+	@Override
+	@Pointcut("execution(* *(.., @NotNull (*), ..))")
+	public void annotatedMethod() {
+	}
 
-	@Before("execution(* *(@NotNull (*)))")
-	public void checkNotNullArgs(JoinPoint joinPoint) {
-		try {
-			MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
-			Object target = joinPoint.getTarget();
-			Method targetMethod = target.getClass().getDeclaredMethod(methodSignature.getName(),
-					methodSignature.getParameterTypes());
-			final Object[] targetObjectMethodArgumentArray = joinPoint.getArgs();
-			Annotation[][] parameterAnnotations = targetMethod.getParameterAnnotations();
-			int parameterIndex = 0;
-			for (final Annotation[] annotations : parameterAnnotations) {
-				for (final Annotation annotation : annotations) {
-					if (annotation instanceof NotNull) {
-						if (targetObjectMethodArgumentArray.length > 0) {
-							Object methodArgument = targetObjectMethodArgumentArray[parameterIndex];
-							if (methodArgument == null) {
-								throw new IllegalArgumentException(((NotNull) annotation).value()
-										+ " must not be null.");
-							}
-						}
-					}
-					parameterIndex++;
-				}
-			}
-		} catch (NoSuchMethodException e) {
-			LOGGER.warn("Unable to check not null argument.", e);
+	@Override
+	protected void processParameter(NotNull paramAnnotation, Class<?> paramType, Object parameter, String paramName) {
+		if (parameter == null) {
+			throw new IllegalArgumentException(paramName + "must not be null");
 		}
+	}
+
+	@Override
+	protected Class<NotNull> getAnnotationClass() {
+		return NotNull.class;
 	}
 }

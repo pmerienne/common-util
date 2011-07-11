@@ -24,4 +24,8 @@ public class NotNullAspectTest {
 		fakeService.doNothingWithString(null);
 	}
 
+	@Test(expected = IllegalArgumentException.class)
+	public void checkNotNullArgsWithMultiple() {
+		fakeService.doNothingWithString("", 0, null);
+	}
 }
